@@ -10,6 +10,7 @@ Fonctionnalites principales
 - Export CSV ou parquet (optionnel)
 - Logging des appels API
 - CLI simple via `python -m velib_ingestion`
+- Streaming temps reel via Kafka (producer + consumer)
 
 Prerequis
 - Python 3.10 ou plus
@@ -44,6 +45,18 @@ CLI
 python -m velib_ingestion --validate --output data/velib.csv --format csv
 ```
 
+Kafka temps reel
+```
+# Publier un snapshot unique dans Kafka
+python -m velib_ingestion --mode kafka-producer --once --validate
+
+# Publier en boucle (polling API toutes les 60 secondes par defaut)
+python -m velib_ingestion --mode kafka-producer --validate
+
+# Consommer un topic
+python -m velib_ingestion --mode kafka-consumer --topic velib.station_status
+```
+
 Structure
 - `src/velib_ingestion/config.py` : lecture des settings
 - `src/velib_ingestion/logger.py` : configuration du logging
@@ -52,6 +65,7 @@ Structure
 - `src/velib_ingestion/transformer.py` : transformation DataFrame
 - `src/velib_ingestion/exporter.py` : export CSV/parquet
 - `src/velib_ingestion/cli.py` : CLI
+- `src/velib_ingestion/kafka_stream.py` : producer/consumer Kafka
 
 Tests
 - `pytest -q`
